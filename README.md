@@ -1,16 +1,128 @@
-# React + Vite
+# AivleSchool 4th Mini Project — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## AI 이미지 생성 기반 도서 관리 시스템 (Frontend)
 
-Currently, two official plugins are available:
+본 프로젝트의 프론트엔드는 **“AI 이미지 생성 기반 나만의 서재 관리 웹 서비스”**를 구현하는 것을 목표로 진행되었다.  
+사용자는 로그인 후, **자신만의 책을 등록·조회·수정·삭제**할 수 있으며,  
+추후 백엔드의 **AI 도서 표지 생성 기능**과 자연스럽게 연동될 수 있도록 UI·데이터 구조를 설계했다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Frontend 핵심 기능
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. 프론트엔드 기본 구조
+- **React + Vite 기반 SPA(Single Page Application)** 구성
+- React Router를 활용하여  
+  `로그인 / 회원가입 / 메인 / 도서 상세 / 도서 등록·수정` 페이지 라우팅 설계
+- 공통 AppBar + Container 레이아웃과 **MUI 커스텀 테마** 적용으로  
+  일관된 버튼, 카드, 레이아웃 스타일 구현
 
-## Expanding the ESLint configuration
+### 2. 유저별 개인 서재
+- 로그인 / 회원가입 화면 및 **기본 입력 검증 로직** 구현
+- 로그인 성공 시, 사용자 정보를 `localStorage`에 저장하여 **로그인 상태 유지**
+- 도서 데이터에 `ownerId`를 부여해  
+  **각 사용자별로 자신의 서재 목록만** 보이도록 필터링 처리
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 3. 도서 관리 UI & CRUD
+- **`MainPage`**
+    - 도서 카드 목록, 제목/작가/장르 정보 미리보기
+    - 제목 / 작가 / 장르 기반 검색 기능
+    - 반응형 카드 레이아웃 및 hover 효과로 시각적인 강조
+- **`BookRegisterPage`**
+    - 제목, 작가, 장르, 줄거리, 표지 프롬프트 입력 후 도서 등록
+- **`BookDetailPage`**
+    - 선택한 도서의 상세 정보 및 표지 이미지 조회
+- **`BookEditPage`**
+    - 기존 데이터가 채워진 상태에서 도서 정보 수정 가능
+    - 삭제 시 메인 페이지로 자연스럽게 이동하는 흐름 구성
+
+### 4. AI 표지 이미지 생성 UI
+- 도서 등록/수정 화면에 **AI 표지 프롬프트 + 옵션(모델, 품질, 스타일, 해상도)** 입력 UI 구성
+- `AI 표지 생성` 버튼 클릭 시 OpenAI Images API 호출 →  
+  응답으로 받은 이미지 URL을 표지 미리보기(`coverPreview`)로 즉시 표시
+- 도서 등록/수정 시 해당 이미지 URL을 `imageUrl` 필드에 함께 담아 저장하도록 설계하여,  
+  이후 메인/상세 화면에서 **AI로 생성된 표지 이미지가 그대로 활용**될 수 있도록 기반 마련
+
+---
+
+## Frontend Contributors
+
+### 👨‍💼 김대호
+1. **프로젝트 PM 역할 수행**
+    - 프로젝트 요구사항을 정리하고, 구현 단위로 세분화
+    - 4차 미니프로젝트 기간 동안 팀원별 역할 분담 및 일정 관리
+    - 구현 범위를 기준으로 화면 기능 흐름·구성도·결과 보고서 작성
+    - Backend ↔ Frontend 간 데이터 전달 방식 정의 및 조율
+2. **UI 초안 스케치 및 화면 구조 설계**
+    - 요구사항에 맞는 기능 구현을 위해 각 페이지의 와이어프레임/초안 스케치 작성  
+      (로그인, 회원가입, 메인 목록, 수정, 등록, 상세 페이지)
+    - 각 화면에서 필요한 컴포넌트 요소를 명확히 정의하여 개발 기준 제공
+3. **UI 디자인 구체화**
+    - MUI 기반 로그인·회원가입·책 등록 화면의 컴포넌트 요소 배치 및 버튼 동작 구현
+    - 레이아웃 재정렬 및 여백/정렬 개선을 통해 전체 화면의 시각적 안정감 확보
+
+---
+
+### 👨‍💻 김효성
+1. **프론트엔드 환경 구축 & 기본 화면 틀 완성**
+    - React + Vite 기반 프로젝트 초기 세팅 및 폴더 구조 설계
+    - React Router로 로그인 / 회원가입 / 메인 / 도서 상세 / 도서 등록·수정 페이지 라우팅 구현
+    - 공통 AppBar, Container 레이아웃과 MUI 커스텀 테마 적용으로  
+      전체 화면의 **기본 UI 프레임** 구축
+
+2. **유저별 개인 서재 로그인 흐름 구현 및 도서 관리 UI 구현**
+    - 로그인 / 회원가입 폼 UI 구현, 입력 값 기본 검증 및  
+      더미 데이터 기반 로그인 상태 관리 로직 구현
+    - 도서 데이터에 `ownerId`를 연결하여, 로그인한 유저의 도서만 보이도록 **개인 서재 필터링 처리**
+    - 메인 페이지에서
+        - 도서 카드 리스트
+        - 제목 / 작가 / 장르 미리보기
+        - 검색 기능
+        - 반응형 카드 레이아웃 및 디자인 구현
+    - `BookRegisterPage / BookDetailPage / BookEditPage`에서  
+      제목, 작가, 장르, **줄거리**, AI 표지 프롬프트를 다루는 폼 및 상세 화면 구성
+    - 도서 등록/수정 화면에 OpenAI 기반 **AI 표지 생성 버튼 + 미리보기 영역**을 추가하여,  
+      추후 이미지 생성 API와 쉽게 연동될 수 있도록 UI/데이터 구조 설계
+
+3. **프론트–백엔드 연동 시도 및 디버깅**
+    - 기존 mock 데이터 중심 구조를 제거하고, `bookService` 모듈을 기준으로 한  
+      **REST API 호출 중심 구조**로 전환
+    - 백엔드 DTO 필드 구조에 맞춰 프론트엔드 요청/응답(JSON) 매핑 작업 수행  
+      (특히 `content`, `description`, `imageUrl` 등 필드 정합성 맞추기)
+    - 줄거리 필드 누락, 응답 필드 불일치 등으로 발생하던 오류를  
+      Chrome DevTools Network 탭 및 콘솔 로그를 통해 분석·해결
+    - AI 표지 생성 후 이미지를 백엔드 데이터와 연결하는 과정에서 발생한 연동 이슈를 확인하고,  
+      **향후 개선해야 할 포인트를 정리**하여 팀과 공유
+
+---
+
+### 👨‍💻 신준섭
+1. **프론트엔드–백엔드 연동 작업 총괄**
+    - 기존 `data/*.js`에서 관리하던 mock 데이터 구조를 제거하고,  
+      `api/*.js` 및 `bookService` 모듈을 중심으로 **Spring Boot REST API 호출 구조로 전면 전환**
+    - Swagger 문서를 기준으로 `BookCreateRequest(title, description, content, genre, author)`  
+      및 User DTO 구조를 분석하여,
+        - 회원가입
+        - 로그인
+        - 도서 등록/수정/조회/삭제  
+          각 기능의 요청/응답 필드를 백엔드 DTO와 1:1로 매핑되도록 리팩터링
+2. **연동 오류 분석 및 해결**
+    - 도서 등록 시 `content` 필드 누락, `/books?userId=` 쿼리 파라미터 미전달,  
+      CORS 설정 문제 등으로 인해 다수의 400(Bad Request) 및 인증 관련 오류 발생
+    - Chrome DevTools Network 탭과 서버 로그를 활용하여  
+      Request Payload / 쿼리스트링을 분석하고, 원인을 단계적으로 추적·해결
+
+---
+
+### 👩‍💻 이시연
+1. **도서 등록 페이지(BookRegisterPage) UI 및 입력 흐름 구현**
+    - MUI 기반으로 도서 등록 폼 UI 구성  
+      (제목, 작가, 장르, 줄거리, AI 표지 프롬프트 입력 폼)
+    - 등록 / 취소 버튼 동작 및 메인 페이지 이동 처리
+    - 필수 입력 항목 체크 등 **기본 입력 검증 로직** 구현
+
+2. **백엔드 연동 및 리팩토링 참여**
+    - 기존 mock 데이터 기반 `books.js`, `users.js` 구조를 이해하고  
+      Axios 기반 API 모듈 구조로 전환하는 과정에 참여
+    - AI 표지 적용 과정에서 발생한 화면 표시 문제를 직접 확인하고,  
+      컴포넌트 렌더링 구조와 데이터 전달 흐름을 중심으로 원인 분석 및 개선 방향 논의
